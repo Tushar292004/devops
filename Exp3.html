@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Docker and Containerization</title>
+    <style>
+        :root {
+            --primary: #2e3440;
+            --secondary: #3b4252;
+            --accent: #5e81ac;
+            --accent-alt: #81a1c1;
+            --light: #eceff4;
+            --success: #a3be8c;
+            --code-bg: #2e3440;
+            --header-bg: #4c566a;
+            --docker-blue: #0db7ed;
+            --docker-dark: #384d54;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--primary);
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--docker-blue) 0%, var(--docker-dark) 100%);
+            color: var(--light);
+            padding: 25px 0;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+        
+        .experiment {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .experiment-header {
+            background-color: var(--docker-blue);
+            padding: 15px 20px;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .experiment-content {
+            padding: 20px;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            margin: 15px 0 10px;
+            color: var(--accent);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .marks {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .code-block {
+            background-color: var(--code-bg);
+            color: #e5e9f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+        
+        .code-block code {
+            white-space: pre-wrap;
+        }
+        
+        .code-title {
+            position: absolute;
+            top: 0;
+            right: 10px;
+            background-color: rgba(46, 52, 64, 0.8);
+            padding: 2px 8px;
+            border-radius: 0 0 4px 4px;
+            font-size: 0.8rem;
+            color: #d8dee9;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--docker-blue);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .result {
+            background-color: var(--success);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .command-line {
+            color: #a3be8c;
+            font-weight: bold;
+        }
+        
+        .comment {
+            color: #81a1c1;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .highlight-docker {
+            color: var(--docker-blue);
+            font-weight: bold;
+        }
+        
+        .highlight-vm {
+            color: #b48ead;
+            font-weight: bold;
+        }
+        
+        .key-term {
+            color: #88c0d0;
+            font-weight: 500;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .comparison {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .comparison-item {
+            flex: 1;
+            min-width: 250px;
+            background-color: #f0f4f8;
+            padding: 15px;
+            margin: 5px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-item h4 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        
+        .directory-structure {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid var(--docker-blue);
+        }
+        
+        .visualization {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        
+        .container-box {
+            background-color: rgba(13, 183, 237, 0.1);
+            border: 2px solid var(--docker-blue);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            width: 45%;
+            min-width: 250px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .container-box h4 {
+            color: var(--docker-blue);
+            margin-bottom: 10px;
+        }
+        
+        .vm-box {
+            background-color: rgba(180, 142, 173, 0.1);
+            border: 2px solid #b48ead;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            width: 45%;
+            min-width: 250px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .vm-box h4 {
+            color: #b48ead;
+            margin-bottom: 10px;
+        }
+        
+        .icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .browser-output {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .browser-output-header {
+            background-color: #f5f5f5;
+            padding: 5px 10px;
+            border-bottom: 1px solid #ddd;
+            border-radius: 5px 5px 0 0;
+            margin: -15px -15px 15px -15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .comparison {
+                flex-direction: column;
+            }
+            
+            .container-box, .vm-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Docker and Containerization</h1>
+            <div class="subtitle">Multi-container Applications and Container vs. VM Comparison</div>
+        </header>
+        
+        <div class="experiment">
+            <div class="experiment-header">
+                Experiment 3(a): Multi-container Application with Docker Compose
+            </div>
+            <div class="experiment-content">
+                <h3>Aim <span class="marks">(5 Marks)</span></h3>
+                <p>To use Docker Compose to define and deploy a multi-container application that includes an application server and a MySQL database server.</p>
+                
+                <h3>Theory/Algorithm <span class="marks">(5 Marks)</span></h3>
+                <p><span class="highlight-docker">Docker Compose</span> is a tool used for defining and running multi-container Docker applications. With a single <code>docker-compose.yml</code> file, you can define all services (e.g., web server, database) and their configurations. It simplifies managing interdependent services.</p>
+                
+                <p><strong>Steps:</strong></p>
+                <ol>
+                    <li>Create a project directory with application code.</li>
+                    <li>Write a <code>Dockerfile</code> for the application server.</li>
+                    <li>Define services in <code>docker-compose.yml</code> (e.g., app + MySQL).</li>
+                    <li>Run all services using <code>docker-compose up</code>.</li>
+                </ol>
+                
+                <h3>Program/Command <span class="marks">(10 Marks)</span></h3>
+                <p><strong>Step 1: Project Structure</strong></p>
+                <div class="directory-structure">
+project/
+│
+├── app/
+│   ├── Dockerfile
+│   └── index.js
+│
+└── docker-compose.yml
+                </div>
+                
+                <p><strong>Step 2: Application Code (Node.js app - </strong><code>app/index.js</code>)</p>
+                <div class="code-block">
+                    <span class="code-title">js</span>
+                    <code>const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => res.send('Hello from App Server!'));
+
+app.listen(3000, () => console.log('App running on port 3000'));</code>
+                </div>
+                
+                <p><strong>Step 3: Dockerfile</strong></p>
+                <div class="code-block">
+                    <span class="code-title">Dockerfile</span>
+                    <code>FROM node:18
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm install express
+
+CMD ["node", "index.js"]</code>
+                </div>
+                
+                <p><strong>Step 4: </strong><code>docker-compose.yml</code></p>
+                <div class="code-block">
+                    <span class="code-title">yaml</span>
+                    <code>version: '3.8'
+
+services:
+  app:
+    build: ./app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpass
+    ports:
+      - "3306:3306"</code>
+                </div>
+                
+                <p><strong>Step 5: Run the application</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="command-line">docker-compose up --build</span></code>
+                </div>
+                
+                <h3>Output <span class="marks">(10 Marks)</span></h3>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code>Building app ...
+Successfully built abc123
+Starting project_db_1 ... done
+Starting project_app_1 ... done
+App running on port 3000</code>
+                </div>
+                
+                <p>Accessing http://localhost:3000 in the browser displays:</p>
+                <div class="browser-output">
+                    <div class="browser-output-header">
+                        localhost:3000
+                    </div>
+                    Hello from App Server!
+                </div>
+                
+                <h3>Result <span class="marks">(5 Marks)</span></h3>
+                <div class="result">
+                    The multi-container application with a Node.js app server and MySQL database was successfully created and executed using Docker Compose.
+                </div>
+            </div>
+        </div>
+        
+        <div class="experiment">
+            <div class="experiment-header">
+                Experiment 3(b): Docker Containers vs. Traditional Virtual Machines
+            </div>
+            <div class="experiment-content">
+                <h3>Aim <span class="marks">(5 Marks)</span></h3>
+                <p>To understand the advantages of using Docker containers compared to traditional virtual machines in application deployment.</p>
+                
+                <h3>Theory/Algorithm <span class="marks">(5 Marks)</span></h3>
+                <p><span class="highlight-docker">Docker containers</span> are a lightweight, portable way to package and run applications. Unlike traditional <span class="highlight-vm">virtual machines (VMs)</span> that require full OS-level virtualization, Docker uses OS-level isolation which makes containers faster and more efficient.</p>
+                
+                <div class="visualization">
+                    <div class="container-box">
+                        <h4>Docker Container</h4>
+                        <p>🔵 Containerized Apps</p>
+                        <p>🔵 Docker Engine</p>
+                        <p>🔵 Host OS</p>
+                        <p>🔵 Infrastructure</p>
+                    </div>
+                    <div class="vm-box">
+                        <h4>Virtual Machine</h4>
+                        <p>🟣 App</p>
+                        <p>🟣 Guest OS</p>
+                        <p>🟣 Hypervisor</p>
+                        <p>🟣 Host OS</p>
+                        <p>🟣 Infrastructure</p>
+                    </div>
+                </div>
+                
+                <h3>Key Differences & Advantages:</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Docker Containers</th>
+                                <th>Virtual Machines</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Startup Time</td>
+                                <td>Seconds</td>
+                                <td>Minutes</td>
+                            </tr>
+                            <tr>
+                                <td>Resource Usage</td>
+                                <td>Lightweight (shares host OS kernel)</td>
+                                <td>Heavy (includes guest OS)</td>
+                            </tr>
+                            <tr>
+                                <td>Portability</td>
+                                <td>Easily portable across environments</td>
+                                <td>Less portable</td>
+                            </tr>
+                            <tr>
+                                <td>Isolation</td>
+                                <td>Process-level</td>
+                                <td>Hardware-level</td>
+                            </tr>
+                            <tr>
+                                <td>Performance</td>
+                                <td>Near-native performance</td>
+                                <td>Slightly slower due to virtualization</td>
+                            </tr>
+                            <tr>
+                                <td>Deployment Speed</td>
+                                <td>Very fast</td>
+                                <td>Slower</td>
+                            </tr>
+                            <tr>
+                                <td>Scalability</td>
+                                <td>Excellent for microservices</td>
+                                <td>Less ideal</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3>Program/Command <span class="marks">(10 Marks)</span></h3>
+                <p>Though it's a theoretical topic, we can demonstrate the size and speed:</p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="comment"># Run a Docker container (example)</span>
+<span class="command-line">docker run hello-world</span>
+
+<span class="comment"># Spin up a VM using VirtualBox (takes much longer)</span></code>
+                </div>
+                
+                <h3>Output <span class="marks">(10 Marks)</span></h3>
+                <p><strong>Docker:</strong></p>
+                <div class="code-block">
+                    <span class="code-title">css</span>
+                    <code>Hello from Docker!
+This message shows that your installation appears to be working correctly.</code>
+                </div>
+                
+                <p><strong>VM:</strong></p>
+                <div class="code-block">
+                    <span class="code-title">scss</span>
+                    <code>[Booting VM...] ⏳ (Takes 1–2 minutes)
+[Login Prompt Appears]</code>
+                </div>
+                
+                <div class="comparison">
+                    <div class="comparison-item">
+                        <h4>Docker Benefits</h4>
+                        <ul>
+                            <li>Lightweight, consumes fewer resources</li>
+                            <li>Fast startup and deployment</li>
+                            <li>Consistent environment across development and production</li>
+                            <li>Perfect for microservices architecture</li>
+                            <li>Easier CI/CD integration</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item">
+                        <h4>VM Advantages</h4>
+                        <ul>
+                            <li>Complete isolation with separate kernel</li>
+                            <li>Can run different operating systems</li>
+                            <li>Better security isolation in some cases</li>
+                            <li>Traditional/legacy application support</li>
+                            <li>Hardware-level customization</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>Result <span class="marks">(5 Marks)</span></h3>
+                <div class="result">
+                    The experiment successfully highlighted the practical and performance-based benefits of Docker containers over traditional virtual machines for efficient application deployment.
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            Docker and Containerization Technologies © 2025
+        </footer>
+    </div>
+</body>
+</html>

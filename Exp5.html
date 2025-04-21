@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chef Automation and Infrastructure Management</title>
+    <style>
+        :root {
+            --primary: #2e3440;
+            --secondary: #3b4252;
+            --accent: #5e81ac;
+            --accent-alt: #81a1c1;
+            --light: #eceff4;
+            --success: #a3be8c;
+            --code-bg: #2e3440;
+            --header-bg: #4c566a;
+            --chef-orange: #f18b21;
+            --chef-dark: #7d4511;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--primary);
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--chef-orange) 0%, var(--chef-dark) 100%);
+            color: var(--light);
+            padding: 25px 0;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+        
+        .experiment {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .experiment-header {
+            background-color: var(--chef-orange);
+            padding: 15px 20px;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .experiment-content {
+            padding: 20px;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            margin: 15px 0 10px;
+            color: var(--accent);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .marks {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .code-block {
+            background-color: var(--code-bg);
+            color: #e5e9f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+        
+        .code-block code {
+            white-space: pre-wrap;
+        }
+        
+        .code-title {
+            position: absolute;
+            top: 0;
+            right: 10px;
+            background-color: rgba(46, 52, 64, 0.8);
+            padding: 2px 8px;
+            border-radius: 0 0 4px 4px;
+            font-size: 0.8rem;
+            color: #d8dee9;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--chef-orange);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .result {
+            background-color: var(--success);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .command-line {
+            color: #a3be8c;
+            font-weight: bold;
+        }
+        
+        .comment {
+            color: #81a1c1;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .highlight-chef {
+            color: var(--chef-orange);
+            font-weight: bold;
+        }
+        
+        .highlight-ruby {
+            color: #cc342d;
+            font-weight: bold;
+        }
+        
+        .key-term {
+            color: #88c0d0;
+            font-weight: 500;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .comparison {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .comparison-item {
+            flex: 1;
+            min-width: 250px;
+            background-color: #f0f4f8;
+            padding: 15px;
+            margin: 5px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-item h4 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        
+        .directory-structure {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid var(--chef-orange);
+        }
+        
+        .visualization {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        
+        .server-box {
+            background-color: rgba(241, 139, 33, 0.1);
+            border: 2px solid var(--chef-orange);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            width: 45%;
+            min-width: 250px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .server-box h4 {
+            color: var(--chef-orange);
+            margin-bottom: 10px;
+        }
+        
+        .client-box {
+            background-color: rgba(94, 129, 172, 0.1);
+            border: 2px solid var(--accent);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            width: 45%;
+            min-width: 250px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .client-box h4 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .browser-output {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .browser-output-header {
+            background-color: #f5f5f5;
+            padding: 5px 10px;
+            border-bottom: 1px solid #ddd;
+            border-radius: 5px 5px 0 0;
+            margin: -15px -15px 15px -15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .comparison {
+                flex-direction: column;
+            }
+            
+            .server-box, .client-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Chef Automation and Infrastructure Management</h1>
+            <div class="subtitle">Configuration Management using Chef Recipes and Infrastructure</div>
+        </header>
+        
+        <div class="experiment">
+            <div class="experiment-header">
+                Experiment 5(a): Chef Recipe for Apache Web Server Installation
+            </div>
+            <div class="experiment-content">
+                <h3>Aim <span class="marks">(5 Marks)</span></h3>
+                <p>To write a Chef recipe that automates the installation and configuration of the Apache web server on a Linux machine.</p>
+                
+                <h3>Theory/Algorithm <span class="marks">(5 Marks)</span></h3>
+                <p><span class="highlight-chef">Chef</span> is an automation platform that allows you to manage infrastructure using code. A Chef recipe is a collection of resources that defines how a particular configuration should be applied on nodes. In this experiment, we'll create a Chef recipe to install and configure Apache.</p>
+                
+                <p><strong>Steps in the Recipe:</strong></p>
+                <ol>
+                    <li>Update the system's package index.</li>
+                    <li>Install Apache using the package manager.</li>
+                    <li>Enable and start the Apache service.</li>
+                    <li>Set up a default HTML page to confirm Apache is running.</li>
+                </ol>
+                
+                <h3>Program/Command <span class="marks">(10 Marks)</span></h3>
+                <p><strong>Chef Recipe - </strong><code>apache_install.rb</code></p>
+                <div class="code-block">
+                    <span class="code-title">ruby</span>
+                    <code># apache_install.rb
+
+# Update the system's package index
+execute 'apt-get update' do
+  command 'apt-get update'
+  action :run
+end
+
+# Install Apache2 package
+package 'apache2' do
+  action :install
+end
+
+# Enable and start the Apache service
+service 'apache2' do
+  action [:enable, :start]
+end
+
+# Create a simple HTML page for the Apache web server
+file '/var/www/html/index.html' do
+  content '<html><body><h1>Apache Web Server is Running</h1></body></html>'
+  action :create
+end</code>
+                </div>
+                
+                <p><strong>Explanation:</strong></p>
+                <ul>
+                    <li><code>execute</code> resource updates the package list.</li>
+                    <li><code>package</code> installs Apache.</li>
+                    <li><code>service</code> ensures Apache starts on boot and runs immediately.</li>
+                    <li><code>file</code> creates a basic HTML page to confirm Apache is running.</li>
+                </ul>
+                
+                <p><strong>Running the Chef recipe:</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="command-line">chef-client --local-mode apache_install.rb</span></code>
+                </div>
+                
+                <h3>Output <span class="marks">(10 Marks)</span></h3>
+                <p>Once the Chef recipe is applied, you can confirm the Apache installation by accessing the server's IP address in a web browser, and you should see:</p>
+                <div class="browser-output">
+                    <div class="browser-output-header">
+                        192.168.1.10
+                    </div>
+                    <h1>Apache Web Server is Running</h1>
+                </div>
+                
+                <p>Additionally, check the Apache service status:</p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="command-line">sudo systemctl status apache2</span>
+● apache2.service - The Apache HTTP Server
+   Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)
+   Active: active (running) since Mon 2025-04-21 10:15:43 UTC; 2min 33s ago
+     Docs: https://httpd.apache.org/docs/2.4/
+ Main PID: 12345 (apache2)
+    Tasks: 55 (limit: 4915)
+   Memory: 5.0M
+   CGroup: /system.slice/apache2.service
+           ├─12345 /usr/sbin/apache2 -k start
+           ├─12346 /usr/sbin/apache2 -k start
+           └─12347 /usr/sbin/apache2 -k start</code>
+                </div>
+                
+                <h3>Result <span class="marks">(5 Marks)</span></h3>
+                <div class="result">
+                    The Apache web server was successfully installed and configured using the Chef recipe. The web server is running and displays a custom HTML page.
+                </div>
+            </div>
+        </div>
+        
+        <div class="experiment">
+            <div class="experiment-header">
+                Experiment 5(b): Chef Server vs. Chef Client Comparison
+            </div>
+            <div class="experiment-content">
+                <h3>Aim <span class="marks">(5 Marks)</span></h3>
+                <p>To understand and explain the roles of Chef server and Chef client in a Chef infrastructure.</p>
+                
+                <h3>Theory/Algorithm <span class="marks">(5 Marks)</span></h3>
+                <p>In Chef, there are two main components: <span class="highlight-chef">Chef server</span> and <span class="highlight-chef">Chef client</span>. Both play critical roles in managing infrastructure, but they have distinct responsibilities.</p>
+                
+                <div class="visualization">
+                    <div class="server-box">
+                        <h4>Chef Server</h4>
+                        <p>🍊 Central hub for configurations</p>
+                        <p>🍊 Stores cookbooks and recipes</p>
+                        <p>🍊 Manages nodes and policies</p>
+                        <p>🍊 Distributes configurations</p>
+                        <p>🍊 Orchestrates infrastructure</p>
+                    </div>
+                    <div class="client-box">
+                        <h4>Chef Client</h4>
+                        <p>🔷 Runs on managed nodes</p>
+                        <p>🔷 Pulls configurations from server</p>
+                        <p>🔷 Applies recipes locally</p>
+                        <p>🔷 Reports state to server</p>
+                        <p>🔷 Ensures desired configuration</p>
+                    </div>
+                </div>
+                
+                <p><strong>Chef Server:</strong></p>
+                <ul>
+                    <li>The Chef server is the central hub where all configurations, cookbooks, and data are stored.</li>
+                    <li>It acts as the source of truth for infrastructure, where nodes (clients) communicate to pull their configurations.</li>
+                    <li>The Chef server manages all the recipes, roles, and environments.</li>
+                    <li>It handles the orchestration of infrastructure configuration, ensuring the correct cookbooks are applied to the correct nodes.</li>
+                    <li><strong>Role:</strong> Central repository, management, and orchestration.</li>
+                </ul>
+                
+                <p><strong>Chef Client:</strong></p>
+                <ul>
+                    <li>The Chef client runs on each node (machine) that you wish to manage.</li>
+                    <li>It communicates with the Chef server to retrieve the configuration data and apply the recipes.</li>
+                    <li>The client checks the server periodically for updates and applies configurations accordingly.</li>
+                    <li>It ensures that the node's state matches the desired state as defined by the recipes.</li>
+                    <li><strong>Role:</strong> Executor of recipes on the local node, ensuring the node's state matches the defined configurations.</li>
+                </ul>
+                
+                <h3>Comparison Table <span class="marks">(10 Marks)</span></h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Chef Server</th>
+                                <th>Chef Client</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Role</td>
+                                <td>Central management of infrastructure</td>
+                                <td>Applies configuration to local node</td>
+                            </tr>
+                            <tr>
+                                <td>Storage</td>
+                                <td>Stores cookbooks, environments, roles, and data</td>
+                                <td>Does not store cookbooks, pulls from server</td>
+                            </tr>
+                            <tr>
+                                <td>Interaction</td>
+                                <td>Sends configuration to clients, manages nodes</td>
+                                <td>Pulls configuration from Chef Server and applies</td>
+                            </tr>
+                            <tr>
+                                <td>Components Managed</td>
+                                <td>Manages roles, policies, and cookbook versions</td>
+                                <td>Executes recipes on the local machine</td>
+                            </tr>
+                            <tr>
+                                <td>Communication</td>
+                                <td>Communicates with all clients and stores logs</td>
+                                <td>Communicates with the server to fetch updates and send reports</td>
+                            </tr>
+                            <tr>
+                                <td>State Management</td>
+                                <td>Maintains infrastructure configuration state</td>
+                                <td>Ensures the node is configured as per the desired state</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3>Program/Command <span class="marks">(10 Marks)</span></h3>
+                <p>This part is more theoretical, but here's an example of a Chef Client interacting with the Chef Server.</p>
+                
+                <p><strong>Chef Client Command:</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="command-line">sudo chef-client</span></code>
+                </div>
+                
+                <p>This command initiates the client, which will:</p>
+                <ol>
+                    <li>Contact the Chef Server.</li>
+                    <li>Fetch the appropriate cookbooks and configurations.</li>
+                    <li>Apply the desired configurations to the node.</li>
+                </ol>
+                
+                <h3>Output <span class="marks">(10 Marks)</span></h3>
+                <p>The Chef client will output information similar to:</p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code>Starting Chef Client, version 15.10.0
+resolving cookbooks for run list: ["apache2::default"]
+Synchronizing Cookbooks:
+  - apache2 (1.0.0)
+  - apt (7.0.0)
+...
+Converging node apache-server...</code>
+                </div>
+                
+                <p>This confirms the client has successfully retrieved configurations and is applying them to the node.</p>
+                
+                <div class="comparison">
+                    <div class="comparison-item">
+                        <h4>Chef Server Workflow</h4>
+                        <ol>
+                            <li>Store and version cookbooks</li>
+                            <li>Maintain node inventory</li>
+                            <li>Assign cookbooks to nodes</li>
+                            <li>Process authentication requests</li>
+                            <li>Track node states</li>
+                        </ol>
+                    </div>
+                    <div class="comparison-item">
+                        <h4>Chef Client Workflow</h4>
+                        <ol>
+                            <li>Register with the Chef Server</li>
+                            <li>Authenticate and download configurations</li>
+                            <li>Build the node object (attributes)</li>
+                            <li>Run the recipes (converge)</li>
+                            <li>Update the Chef Server with results</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <h3>Result <span class="marks">(5 Marks)</span></h3>
+                <div class="result">
+                    The Chef client communicates with the Chef server to fetch configurations and apply them. The roles of the Chef server and client were successfully explained and demonstrated.
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            Chef Automation and Infrastructure Management © 2025
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Version Control Systems</title>
+    <style>
+        :root {
+            --primary: #2e3440;
+            --secondary: #3b4252;
+            --accent: #5e81ac;
+            --accent-alt: #81a1c1;
+            --light: #eceff4;
+            --success: #a3be8c;
+            --code-bg: #2e3440;
+            --header-bg: #4c566a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--primary);
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--header-bg);
+            color: var(--light);
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+        
+        .experiment {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .experiment-header {
+            background-color: var(--accent);
+            padding: 15px 20px;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .experiment-content {
+            padding: 20px;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            margin: 15px 0 10px;
+            color: var(--accent);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .marks {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .code-block {
+            background-color: var(--code-bg);
+            color: #e5e9f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+        
+        .code-block code {
+            white-space: pre-wrap;
+        }
+        
+        .code-title {
+            position: absolute;
+            top: 0;
+            right: 10px;
+            background-color: rgba(46, 52, 64, 0.8);
+            padding: 2px 8px;
+            border-radius: 0 0 4px 4px;
+            font-size: 0.8rem;
+            color: #d8dee9;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .result {
+            background-color: var(--success);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .command-line {
+            color: #a3be8c;
+            font-weight: bold;
+        }
+        
+        .comment {
+            color: #81a1c1;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .highlight-rcs {
+            color: #ebcb8b;
+            font-weight: bold;
+        }
+        
+        .highlight-git {
+            color: #b48ead;
+            font-weight: bold;
+        }
+        
+        .key-term {
+            color: #88c0d0;
+            font-weight: 500;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .comparison {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .comparison-item {
+            flex: 1;
+            min-width: 250px;
+            background-color: #f0f4f8;
+            padding: 15px;
+            margin: 5px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-item h4 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .comparison {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Version Control Systems</h1>
+            <div class="subtitle">Exploring RCS and Git Repository Management</div>
+        </header>
+        
+        <div class="experiment">
+            <div class="experiment-header">
+                Experiment 2(a): Managing a Legacy Website with RCS
+            </div>
+            <div class="experiment-content">
+                <h3>Aim <span class="marks">(5 Marks)</span></h3>
+                <p>To initialize and manage a version control system for a legacy website project using RCS (Revision Control System), including adding files, checking in/out revisions, and viewing revision history.</p>
+                
+                <h3>Theory/Algorithm <span class="marks">(5 Marks)</span></h3>
+                <p><span class="highlight-rcs">RCS (Revision Control System)</span> is a version control tool used to manage changes to individual files. It stores versions of text files and allows developers to track changes over time, revert to previous revisions, and manage concurrent edits.</p>
+                
+                <p><strong>Key Steps in RCS:</strong></p>
+                <ol>
+                    <li>Initialize the RCS repository by creating an <code>RCS/</code> directory.</li>
+                    <li>Check in files using <code>ci</code> (check-in command), which creates a versioned <code>.v</code> file.</li>
+                    <li>Use <code>co</code> (check-out command) to retrieve working copies.</li>
+                    <li>View version history with <code>rlog</code>.</li>
+                </ol>
+                
+                <h3>Program/Command <span class="marks">(10 Marks)</span></h3>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="comment"># Step 1: Navigate to the project directory</span>
+<span class="command-line">cd legacy-website</span>
+
+<span class="comment"># Step 2: Create the RCS directory (if not already present)</span>
+<span class="command-line">mkdir RCS</span>
+
+<span class="comment"># Step 3: Add a file to RCS (first-time check-in)</span>
+<span class="command-line">ci -u index.html</span>
+
+<span class="comment"># Step 4: Make changes to the file</span>
+<span class="command-line">echo "<!-- Added footer section -->" >> index.html</span>
+
+<span class="comment"># Step 5: Check-in the updated file with a message</span>
+<span class="command-line">ci -m"Added footer section" index.html</span>
+
+<span class="comment"># Step 6: Check out the file for editing again</span>
+<span class="command-line">co -l index.html</span>
+
+<span class="comment"># Step 7: View revision history</span>
+<span class="command-line">rlog index.html</span></code>
+                </div>
+                
+                <h3>Output <span class="marks">(10 Marks)</span></h3>
+                <div class="code-block">
+                    <span class="code-title">yaml</span>
+                    <code>RCS/index.html,v <-- index.html
+enter description, terminated with single '.' or end of file:
+NOTE: This is the initial version.
+.
+
+revision 1.1
+date: 2025-04-21; author: tushar; state: Exp;
+Initial revision
+
+revision 1.2
+date: 2025-04-21; author: tushar; state: Exp;
+Added footer section</code>
+                </div>
+                
+                <h3>Result <span class="marks">(5 Marks)</span></h3>
+                <div class="result">
+                    The RCS repository was successfully initialized. Files were added, revisions were managed using check-in/check-out, and revision history was viewed successfully using RCS commands.
+                </div>
+            </div>
+        </div>
+        
+        <div class="experiment">
+            <div class="experiment-header">
+                Experiment 2(b): Bare vs Non-Bare Git Repositories
+            </div>
+            <div class="experiment-content">
+                <h3>Aim <span class="marks">(5 Marks)</span></h3>
+                <p>To understand and explain the difference between a bare and a non-bare Git repository and their use cases in version control.</p>
+                
+                <h3>Theory/Algorithm <span class="marks">(5 Marks)</span></h3>
+                <p>In <span class="highlight-git">Git</span>, repositories can be of two types:</p>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Bare Repository</th>
+                                <th>Non-Bare Repository</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Contains Working Directory</td>
+                                <td>❌ No working directory</td>
+                                <td>✅ Has a working directory</td>
+                            </tr>
+                            <tr>
+                                <td>Intended Use</td>
+                                <td>For collaboration/server-based sharing (e.g., <code>origin</code>)</td>
+                                <td>For local development</td>
+                            </tr>
+                            <tr>
+                                <td>Git Content Structure</td>
+                                <td>Contains only <code>.git/</code> files</td>
+                                <td>Contains <code>.git/</code> and working files</td>
+                            </tr>
+                            <tr>
+                                <td>Push/Pull</td>
+                                <td>✅ Used to push/pull from remotes</td>
+                                <td>❌ Should not push into directly</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="comparison">
+                    <div class="comparison-item">
+                        <h4>Bare Repository</h4>
+                        <p>A <span class="key-term">bare repository</span> is essentially just the <code>.git</code> directory content without a working directory. It's designed to be a central repository that multiple developers can push to and pull from.</p>
+                        <p>Think of it as the "server-side" repository that doesn't need working files.</p>
+                    </div>
+                    <div class="comparison-item">
+                        <h4>Non-Bare Repository</h4>
+                        <p>A <span class="key-term">non-bare repository</span> includes both the <code>.git</code> directory and a working directory with the actual project files. This is what developers use on their local machines.</p>
+                        <p>This allows developers to edit files, stage changes, and commit locally.</p>
+                    </div>
+                </div>
+                
+                <h3>Program/Command <span class="marks">(10 Marks)</span></h3>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="comment"># Create a bare repository (for remote use)</span>
+<span class="command-line">git init --bare project.git</span>
+<span class="comment"># Output: Initialized empty Git repository in /path/to/project.git/</span>
+
+<span class="comment"># Create a non-bare repository (for local development)</span>
+<span class="command-line">mkdir dev-project</span>
+<span class="command-line">cd dev-project</span>
+<span class="command-line">git init</span>
+<span class="comment"># Output: Initialized empty Git repository in /path/to/dev-project/.git/</span></code>
+                </div>
+                
+                <h3>Output <span class="marks">(10 Marks)</span></h3>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="comment"># Bare Repo</span>
+Initialized empty Git repository in /home/user/project.git/
+
+<span class="comment"># Non-Bare Repo</span>
+Initialized empty Git repository in /home/user/dev-project/.git/</code>
+                </div>
+                
+                <h3>Result <span class="marks">(5 Marks)</span></h3>
+                <div class="result">
+                    The differences between bare and non-bare Git repositories were successfully explained. Commands were demonstrated to initialize both types of repositories, and their respective use cases were clarified.
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            Version Control Systems: RCS & Git Repository Management © 2025
+        </footer>
+    </div>
+</body>
+</html>

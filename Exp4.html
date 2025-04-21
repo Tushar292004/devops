@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kubernetes and Container Orchestration</title>
+    <style>
+        :root {
+            --primary: #2e3440;
+            --secondary: #3b4252;
+            --accent: #5e81ac;
+            --accent-alt: #81a1c1;
+            --light: #eceff4;
+            --success: #a3be8c;
+            --code-bg: #2e3440;
+            --header-bg: #4c566a;
+            --kubernetes-blue: #326ce5;
+            --kubernetes-dark: #303e6b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--primary);
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--kubernetes-blue) 0%, var(--kubernetes-dark) 100%);
+            color: var(--light);
+            padding: 25px 0;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+        
+        .experiment {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .experiment-header {
+            background-color: var(--kubernetes-blue);
+            padding: 15px 20px;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .experiment-content {
+            padding: 20px;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            margin: 15px 0 10px;
+            color: var(--accent);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .marks {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .code-block {
+            background-color: var(--code-bg);
+            color: #e5e9f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+        
+        .code-block code {
+            white-space: pre-wrap;
+        }
+        
+        .code-title {
+            position: absolute;
+            top: 0;
+            right: 10px;
+            background-color: rgba(46, 52, 64, 0.8);
+            padding: 2px 8px;
+            border-radius: 0 0 4px 4px;
+            font-size: 0.8rem;
+            color: #d8dee9;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--kubernetes-blue);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .result {
+            background-color: var(--success);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .command-line {
+            color: #a3be8c;
+            font-weight: bold;
+        }
+        
+        .comment {
+            color: #81a1c1;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .highlight-kubernetes {
+            color: var(--kubernetes-blue);
+            font-weight: bold;
+        }
+        
+        .highlight-docker {
+            color: #0db7ed;
+            font-weight: bold;
+        }
+        
+        .key-term {
+            color: #88c0d0;
+            font-weight: 500;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .comparison {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .comparison-item {
+            flex: 1;
+            min-width: 250px;
+            background-color: #f0f4f8;
+            padding: 15px;
+            margin: 5px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-item h4 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+        
+        .directory-structure {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid var(--kubernetes-blue);
+        }
+        
+        .visualization {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        
+        .k8s-box {
+            background-color: rgba(50, 108, 229, 0.1);
+            border: 2px solid var(--kubernetes-blue);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            width: 45%;
+            min-width: 250px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .k8s-box h4 {
+            color: var(--kubernetes-blue);
+            margin-bottom: 10px;
+        }
+        
+        .swarm-box {
+            background-color: rgba(13, 183, 237, 0.1);
+            border: 2px solid #0db7ed;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            width: 45%;
+            min-width: 250px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .swarm-box h4 {
+            color: #0db7ed;
+            margin-bottom: 10px;
+        }
+        
+        .icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .browser-output {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .browser-output-header {
+            background-color: #f5f5f5;
+            padding: 5px 10px;
+            border-bottom: 1px solid #ddd;
+            border-radius: 5px 5px 0 0;
+            margin: -15px -15px 15px -15px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .comparison {
+                flex-direction: column;
+            }
+            
+            .k8s-box, .swarm-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Kubernetes and Container Orchestration</h1>
+            <div class="subtitle">Deploying Scalable Applications with Kubernetes and Orchestration Comparison</div>
+        </header>
+        
+        <div class="experiment">
+            <div class="experiment-header">
+                Experiment 4(a): Deploying a Scalable Application with Kubernetes
+            </div>
+            <div class="experiment-content">
+                <h3>Aim <span class="marks">(5 Marks)</span></h3>
+                <p>To deploy and manage a scalable web application using Kubernetes orchestration platform.</p>
+                
+                <h3>Theory/Algorithm <span class="marks">(5 Marks)</span></h3>
+                <p><span class="highlight-kubernetes">Kubernetes</span> is an open-source container orchestration platform designed to automate deploying, scaling, and operating containerized applications. It groups containers that make up an application into logical units for easy management and discovery.</p>
+                
+                <p><strong>Steps:</strong></p>
+                <ol>
+                    <li>Create a Kubernetes cluster</li>
+                    <li>Deploy a containerized application</li>
+                    <li>Scale the application deployment</li>
+                    <li>Expose the application via a Service</li>
+                    <li>Update the application with zero downtime</li>
+                </ol>
+                
+                <h3>Program/Command <span class="marks">(10 Marks)</span></h3>
+                <p><strong>Step 1: Project Structure</strong></p>
+                <div class="directory-structure">
+k8s-demo/
+│
+├── app/
+│   ├── Dockerfile
+│   └── server.js
+│
+└── kubernetes/
+    ├── deployment.yaml
+    └── service.yaml
+                </div>
+                
+                <p><strong>Step 2: Application Code (Node.js app - </strong><code>app/server.js</code>)</p>
+                <div class="code-block">
+                    <span class="code-title">js</span>
+                    <code>const express = require('express');
+const app = express();
+const version = '1.0';
+
+app.get('/', (req, res) => {
+  res.send(`Web Application v${version} running on ${process.env.HOSTNAME}`);
+});
+
+app.listen(8080, () => console.log('Web app running on port 8080'));</code>
+                </div>
+                
+                <p><strong>Step 3: Dockerfile</strong></p>
+                <div class="code-block">
+                    <span class="code-title">Dockerfile</span>
+                    <code>FROM node:18-alpine
+
+WORKDIR /app
+
+COPY . .
+
+RUN npm install express
+
+EXPOSE 8080
+
+CMD ["node", "server.js"]</code>
+                </div>
+                
+                <p><strong>Step 4: Build and push Docker image</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="command-line">docker build -t mywebapp:v1 ./app</span>
+<span class="command-line">docker tag mywebapp:v1 myregistry/mywebapp:v1</span>
+<span class="command-line">docker push myregistry/mywebapp:v1</span></code>
+                </div>
+                
+                <p><strong>Step 5: Kubernetes Deployment file (</strong><code>kubernetes/deployment.yaml</code>)</p>
+                <div class="code-block">
+                    <span class="code-title">yaml</span>
+                    <code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: myregistry/mywebapp:v1
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "200m"</code>
+                </div>
+                
+                <p><strong>Step 6: Kubernetes Service file (</strong><code>kubernetes/service.yaml</code>)</p>
+                <div class="code-block">
+                    <span class="code-title">yaml</span>
+                    <code>apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  selector:
+    app: webapp
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: LoadBalancer</code>
+                </div>
+                
+                <p><strong>Step 7: Deploy the application to Kubernetes</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="command-line">kubectl apply -f kubernetes/deployment.yaml</span>
+<span class="command-line">kubectl apply -f kubernetes/service.yaml</span></code>
+                </div>
+                
+                <p><strong>Step 8: Scale the deployment</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="command-line">kubectl scale deployment webapp-deployment --replicas=5</span></code>
+                </div>
+                
+                <h3>Output <span class="marks">(10 Marks)</span></h3>
+                <p><strong>Check deployment status:</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="command-line">kubectl get deployments</span>
+NAME                READY   UP-TO-DATE   AVAILABLE   AGE
+webapp-deployment   5/5     5            5           2m</code>
+                </div>
+                
+                <p><strong>Check pods:</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="command-line">kubectl get pods</span>
+NAME                                 READY   STATUS    RESTARTS   AGE
+webapp-deployment-6d5bc44d96-8v6tj   1/1     Running   0          2m
+webapp-deployment-6d5bc44d96-bx9z3   1/1     Running   0          2m
+webapp-deployment-6d5bc44d96-hk5mr   1/1     Running   0          2m
+webapp-deployment-6d5bc44d96-lj2r5   1/1     Running   0          35s
+webapp-deployment-6d5bc44d96-wz6v7   1/1     Running   0          35s</code>
+                </div>
+                
+                <p><strong>Check service:</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="command-line">kubectl get services</span>
+NAME             TYPE           CLUSTER-IP      EXTERNAL-IP    PORT(S)        AGE
+kubernetes       ClusterIP      10.96.0.1       <none>         443/TCP        7d
+webapp-service   LoadBalancer   10.96.153.204   192.168.1.10   80:31450/TCP   2m</code>
+                </div>
+                
+                <p>Accessing http://192.168.1.10 in the browser displays:</p>
+                <div class="browser-output">
+                    <div class="browser-output-header">
+                        192.168.1.10
+                    </div>
+                    Web Application v1.0 running on webapp-deployment-6d5bc44d96-8v6tj
+                </div>
+                
+                <p><strong>Update application (rolling update):</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="command-line">kubectl set image deployment/webapp-deployment webapp=myregistry/mywebapp:v2</span>
+deployment.apps/webapp-deployment image updated</code>
+                </div>
+                
+                <h3>Result <span class="marks">(5 Marks)</span></h3>
+                <div class="result">
+                    Successfully deployed a scalable web application on Kubernetes, managed replicas, and demonstrated rolling updates with zero downtime.
+                </div>
+            </div>
+        </div>
+        
+        <div class="experiment">
+            <div class="experiment-header">
+                Experiment 4(b): Kubernetes vs. Docker Swarm Comparison
+            </div>
+            <div class="experiment-content">
+                <h3>Aim <span class="marks">(5 Marks)</span></h3>
+                <p>To understand the differences between Kubernetes and Docker Swarm as container orchestration platforms and identify their respective use cases.</p>
+                
+                <h3>Theory/Algorithm <span class="marks">(5 Marks)</span></h3>
+                <p><span class="highlight-kubernetes">Kubernetes</span> and <span class="highlight-docker">Docker Swarm</span> are both container orchestration platforms that help manage containerized applications. While Docker Swarm is tightly integrated with Docker and prioritizes simplicity, Kubernetes offers more features for complex deployments at the cost of increased complexity.</p>
+                
+                <div class="visualization">
+                    <div class="k8s-box">
+                        <h4>Kubernetes Architecture</h4>
+                        <p>🔷 Control Plane (Master)</p>
+                        <p>🔷 Nodes (Workers)</p>
+                        <p>🔷 Pods</p>
+                        <p>🔷 Services</p>
+                        <p>🔷 ConfigMaps & Secrets</p>
+                    </div>
+                    <div class="swarm-box">
+                        <h4>Docker Swarm Architecture</h4>
+                        <p>🔵 Manager Nodes</p>
+                        <p>🔵 Worker Nodes</p>
+                        <p>🔵 Services</p>
+                        <p>🔵 Tasks</p>
+                        <p>🔵 Configs & Secrets</p>
+                    </div>
+                </div>
+                
+                <h3>Key Differences:</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Kubernetes</th>
+                                <th>Docker Swarm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Setup Complexity</td>
+                                <td>More complex</td>
+                                <td>Simpler, faster setup</td>
+                            </tr>
+                            <tr>
+                                <td>Learning Curve</td>
+                                <td>Steeper</td>
+                                <td>Gentler</td>
+                            </tr>
+                            <tr>
+                                <td>Scalability</td>
+                                <td>Handles very large clusters well</td>
+                                <td>Good for smaller deployments</td>
+                            </tr>
+                            <tr>
+                                <td>Auto-scaling</td>
+                                <td>Built-in Horizontal Pod Autoscaler</td>
+                                <td>Limited, requires custom solutions</td>
+                            </tr>
+                            <tr>
+                                <td>Load Balancing</td>
+                                <td>Manual configuration required</td>
+                                <td>Automatic</td>
+                            </tr>
+                            <tr>
+                                <td>Updates</td>
+                                <td>Rolling updates, canary deployments</td>
+                                <td>Basic rolling updates</td>
+                            </tr>
+                            <tr>
+                                <td>Service Discovery</td>
+                                <td>DNS-based</td>
+                                <td>DNS + internal load balancing</td>
+                            </tr>
+                            <tr>
+                                <td>CLI Commands</td>
+                                <td>kubectl</td>
+                                <td>docker</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3>Program/Command <span class="marks">(10 Marks)</span></h3>
+                <p><strong>Kubernetes (kubectl) Commands:</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="comment"># Create deployment</span>
+<span class="command-line">kubectl create deployment nginx --image=nginx</span>
+
+<span class="comment"># Scale deployment</span>
+<span class="command-line">kubectl scale deployment nginx --replicas=5</span>
+
+<span class="comment"># Expose service</span>
+<span class="command-line">kubectl expose deployment nginx --type=LoadBalancer --port=80</span></code>
+                </div>
+                
+                <p><strong>Docker Swarm Commands:</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="comment"># Initialize swarm</span>
+<span class="command-line">docker swarm init</span>
+
+<span class="comment"># Deploy service</span>
+<span class="command-line">docker service create --name nginx --replicas 5 -p 80:80 nginx</span>
+
+<span class="comment"># Scale service</span>
+<span class="command-line">docker service scale nginx=10</span></code>
+                </div>
+                
+                <h3>Output <span class="marks">(10 Marks)</span></h3>
+                <p><strong>Kubernetes Output:</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="command-line">kubectl get pods</span>
+NAME                     READY   STATUS    RESTARTS   AGE
+nginx-6799fc88d8-5nvr8   1/1     Running   0          2m
+nginx-6799fc88d8-8k7zq   1/1     Running   0          2m
+nginx-6799fc88d8-j7bxs   1/1     Running   0          2m
+nginx-6799fc88d8-n9pv4   1/1     Running   0          2m
+nginx-6799fc88d8-zlpnd   1/1     Running   0          2m
+
+<span class="command-line">kubectl get services</span>
+NAME         TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)        AGE
+kubernetes   ClusterIP      10.96.0.1      <none>           443/TCP        5d
+nginx        LoadBalancer   10.108.14.51   203.0.113.10     80:30441/TCP   1m</code>
+                </div>
+                
+                <p><strong>Docker Swarm Output:</strong></p>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="command-line">docker service ls</span>
+ID             NAME      MODE         REPLICAS   IMAGE          PORTS
+s7atig1qq5f2   nginx     replicated   10/10      nginx:latest   *:80->80/tcp
+
+<span class="command-line">docker service ps nginx</span>
+ID             NAME      IMAGE          NODE       DESIRED STATE   CURRENT STATE
+r7wv7wd85pxn   nginx.1   nginx:latest   worker1    Running         Running 2 minutes ago
+m9tp3vzf1g8h   nginx.2   nginx:latest   worker2    Running         Running 2 minutes ago
+c6hjxekr72jo   nginx.3   nginx:latest   worker1    Running         Running 2 minutes ago
+...</code>
+                </div>
+                
+                <div class="comparison">
+                    <div class="comparison-item">
+                        <h4>When to Choose Kubernetes</h4>
+                        <ul>
+                            <li>Complex, microservices-based applications</li>
+                            <li>Large-scale deployments</li>
+                            <li>Need for advanced auto-scaling</li>
+                            <li>Multi-cloud strategy</li>
+                            <li>Requirement for sophisticated deployment strategies</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-item">
+                        <h4>When to Choose Docker Swarm</h4>
+                        <ul>
+                            <li>Smaller deployments</li>
+                            <li>Simpler application architecture</li>
+                            <li>Already invested in Docker ecosystem</li>
+                            <li>Need for rapid deployment</li>
+                            <li>Teams with limited container orchestration experience</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>Result <span class="marks">(5 Marks)</span></h3>
+                <div class="result">
+                    The experiment successfully compared Kubernetes and Docker Swarm as container orchestration platforms, highlighting their respective strengths, weaknesses, and appropriate use cases.
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            Kubernetes and Container Orchestration Technologies © 2025
+        </footer>
+    </div>
+</body>
+</html>

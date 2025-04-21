@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git Experiments</title>
+    <style>
+        :root {
+            --primary: #2e3440;
+            --secondary: #3b4252;
+            --accent: #5e81ac;
+            --light: #eceff4;
+            --success: #a3be8c;
+            --code-bg: #2e3440;
+            --header-bg: #4c566a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--primary);
+            background-color: #f5f7fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--header-bg);
+            color: var(--light);
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+        
+        .experiment {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .experiment-header {
+            background-color: var(--accent);
+            padding: 15px 20px;
+            color: white;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .experiment-content {
+            padding: 20px;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            margin: 15px 0 10px;
+            color: var(--accent);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .marks {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .code-block {
+            background-color: var(--code-bg);
+            color: #e5e9f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+        
+        .code-block code {
+            white-space: pre-wrap;
+        }
+        
+        .code-title {
+            position: absolute;
+            top: 0;
+            right: 10px;
+            background-color: rgba(46, 52, 64, 0.8);
+            padding: 2px 8px;
+            border-radius: 0 0 4px 4px;
+            font-size: 0.8rem;
+            color: #d8dee9;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .result {
+            background-color: var(--success);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .command-line {
+            color: #a3be8c;
+            font-weight: bold;
+        }
+        
+        .comment {
+            color: #81a1c1;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .tag-highlight {
+            color: #ebcb8b;
+        }
+        
+        .branch-highlight {
+            color: #b48ead;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Git Experiments</h1>
+            <div class="subtitle">Understanding Git Repository Operations and Concepts</div>
+        </header>
+        
+        <div class="experiment">
+            <div class="experiment-header">
+                Experiment 1(a): Cloning and Modifying a Git Repository
+            </div>
+            <div class="experiment-content">
+                <h3>Aim <span class="marks">(5 Marks)</span></h3>
+                <p>To clone an existing Git repository from a remote server, make modifications to a file, commit the changes, and push them back to the remote repository.</p>
+                
+                <h3>Theory/Algorithm <span class="marks">(5 Marks)</span></h3>
+                <p>Git is a distributed version control system that allows developers to collaborate on projects efficiently. The process of cloning a repository involves copying an existing remote repository to a local machine. After making changes to files in the local copy, Git allows committing (saving) those changes and pushing them back to the original remote repository to update the central codebase.</p>
+                
+                <p><strong>Steps:</strong></p>
+                <ol>
+                    <li>Clone the remote repository using <code>git clone &lt;url&gt;</code>.</li>
+                    <li>Make changes to any file using a code/text editor.</li>
+                    <li>Add the changed file to the staging area using <code>git add &lt;filename&gt;</code>.</li>
+                    <li>Commit the changes using <code>git commit -m "message"</code>.</li>
+                    <li>Push the commit to the remote repository using <code>git push</code>.</li>
+                </ol>
+                
+                <h3>Program/Command <span class="marks">(10 Marks)</span></h3>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="comment"># Step 1: Clone the repository</span>
+<span class="command-line">git clone https://github.com/example-user/demo-repo.git</span>
+
+<span class="comment"># Step 2: Navigate into the repository</span>
+<span class="command-line">cd demo-repo</span>
+
+<span class="comment"># Step 3: Edit any file (e.g., README.md)</span>
+<span class="command-line">echo "This is a new line added to the README file." >> README.md</span>
+
+<span class="comment"># Step 4: Stage the changes</span>
+<span class="command-line">git add README.md</span>
+
+<span class="comment"># Step 5: Commit the changes</span>
+<span class="command-line">git commit -m "Updated README with a new line"</span>
+
+<span class="comment"># Step 6: Push the changes to the remote repository</span>
+<span class="command-line">git push origin main</span></code>
+                </div>
+                
+                <h3>Output <span class="marks">(10 Marks)</span></h3>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code>Cloning into 'demo-repo'...
+remote: Enumerating objects: 10, done.
+remote: Counting objects: 100% (10/10), done.
+remote: Compressing objects: 100% (6/6), done.
+Receiving objects: 100% (10/10), done.
+
+[main 6a1f3b2] Updated README with a new line
+1 file changed, 1 insertion(+)
+
+To https://github.com/example-user/demo-repo.git
+f1e2d3a..6a1f3b2 main -> main</code>
+                </div>
+                
+                <h3>Result <span class="marks">(5 Marks)</span></h3>
+                <div class="result">
+                    The experiment was successfully performed. The existing repository was cloned, a file was modified, changes were committed locally, and updates were pushed back to the remote repository.
+                </div>
+            </div>
+        </div>
+        
+        <div class="experiment">
+            <div class="experiment-header">
+                Experiment 1(b): Git Tags vs Branches
+            </div>
+            <div class="experiment-content">
+                <h3>Aim <span class="marks">(5 Marks)</span></h3>
+                <p>To understand the purpose of Git tags and how they are different from branches in a version control environment.</p>
+                
+                <h3>Theory/Algorithm <span class="marks">(5 Marks)</span></h3>
+                <p>Git <span class="tag-highlight">tags</span> are used to mark specific points in the repository's history as important, typically used for version releases (e.g., v1.0, v2.5). Unlike branches, tags do not change or move with new commits. Tags are read-only pointers to specific commits.</p>
+                
+                <h3>Differences between Tags and Branches:</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Tags</th>
+                                <th>Branches</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Purpose</td>
+                                <td>Marking release points</td>
+                                <td>Feature development, bug fixes</td>
+                            </tr>
+                            <tr>
+                                <td>Movability</td>
+                                <td>Fixed (points to a specific commit)</td>
+                                <td>Moves with new commits</td>
+                            </tr>
+                            <tr>
+                                <td>Editability</td>
+                                <td>Not editable</td>
+                                <td>Can be updated with new commits</td>
+                            </tr>
+                            <tr>
+                                <td>Usage</td>
+                                <td>Used for versioning</td>
+                                <td>Used for ongoing development</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3>Tagging Syntax Example:</h3>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="comment"># Create a tag</span>
+<span class="command-line">git tag v1.0</span>
+
+<span class="comment"># Push a tag to remote</span>
+<span class="command-line">git push origin v1.0</span>
+
+<span class="comment"># List all tags</span>
+<span class="command-line">git tag</span></code>
+                </div>
+                
+                <h3>Program/Command <span class="marks">(10 Marks)</span></h3>
+                <div class="code-block">
+                    <span class="code-title">bash</span>
+                    <code><span class="comment"># Create a new tag</span>
+<span class="command-line">git tag v1.0</span>
+
+<span class="comment"># Verify the tag was created</span>
+<span class="command-line">git tag</span>
+
+<span class="comment"># Push the tag to remote</span>
+<span class="command-line">git push origin v1.0</span></code>
+                </div>
+                
+                <h3>Output <span class="marks">(10 Marks)</span></h3>
+                <div class="code-block">
+                    <span class="code-title">php</span>
+                    <code><span class="comment"># Output of git tag</span>
+v1.0
+
+<span class="comment"># Output of git push origin v1.0</span>
+To https://github.com/example-user/demo-repo.git
+* [new tag] v1.0 -> v1.0</code>
+                </div>
+                
+                <h3>Result <span class="marks">(5 Marks)</span></h3>
+                <div class="result">
+                    The concept of Git tags was successfully explained and demonstrated. Git tags are used to label specific versions, unlike branches which continue to evolve over time.
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            Git Experiments & Operations © 2025
+        </footer>
+    </div>
+</body>
+</html>
